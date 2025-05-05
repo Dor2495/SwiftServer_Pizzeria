@@ -133,7 +133,7 @@ server.GET["/orders"] = { request in
     guard let json = lastOrderJSON,
           let data = json.data(using: .utf8),
           let items = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else {
-        return .ok(.html("<html><body><p>No valid orders found.</p></body></html>"))
+        return .ok(.html("<html><body><meta http-equiv=\"refresh\" content=\"0.5\"><h1 style=\"text-align:center;\">Last refreshed: \(Date().timeIntervalSince1970)</h1><p>No valid orders found.</p></body></html>"))
     }
     print("Last Order: \(lastOrderJSON ?? "No JSON received yet")")
     var tableHTML = """
@@ -149,6 +149,8 @@ server.GET["/orders"] = { request in
       </style>
     </head>
     <body>
+      <meta http-equiv="refresh" content="0.5">
+      <h1 style="text-align:center;">Last refreshed: \(Date().timeIntervalSince1970)</h1>
       <h1 style="text-align:center;">Last Order</h1>
       <table>
         <tr>
@@ -159,10 +161,11 @@ server.GET["/orders"] = { request in
         return .ok(.html("<html><body><p>No items in the order.</p></body></html>"))
     }
 
-    let keys = Array(firstItem.keys)
-
+    // Define fixed column order
+    let orderedKeys = ["id", "vegetarian", "name", "description", "price"]
+    
     // Headers
-    for key in keys {
+    for key in orderedKeys {
         tableHTML += "<th>\(key.capitalized)</th>"
     }
     tableHTML += "</tr>"
@@ -171,7 +174,7 @@ server.GET["/orders"] = { request in
     var totalPrice: Double = 0.0
     for item in items {
         tableHTML += "<tr>"
-        for key in keys {
+        for key in orderedKeys {
             let value = item[key] ?? ""
             if key == "price", let price = value as? Double {
                 totalPrice += price
@@ -185,7 +188,7 @@ server.GET["/orders"] = { request in
 
     // Total row (bottom right)
     tableHTML += "<tr>"
-    for i in 0..<(keys.count - 2) {
+    for i in 0..<(orderedKeys.count - 2) {
         tableHTML += "<td></td>"
     }
     tableHTML += "<td class='total-label'>Total</td>"
@@ -193,8 +196,8 @@ server.GET["/orders"] = { request in
     tableHTML += "</tr>"
 
     tableHTML += "</table></body></html>"
-    
 //    printRequest(request)
+
 
     return .ok(.html(tableHTML))
 }
