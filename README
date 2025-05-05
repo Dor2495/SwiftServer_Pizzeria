@@ -1,0 +1,126 @@
+# SwiftServer_Pizzeria
+
+SwiftServer_Pizzeria is a lightweight Swift-based server application designed for a fictional pizzeria. The server provides several endpoints to simulate real-world functionalities such as viewing menu details, placing orders, and retrieving order history. It is built using the [Swifter](https://github.com/httpswift/swifter) library for handling HTTP requests and responses.
+
+## Features
+
+- **View Pizzeria Information**
+  - Endpoint: `/pizza`
+  - Returns information about the pizzeria such as name, address, contact details, and opening hours in JSON format.
+
+- **Browse the Menu**
+  - Endpoint: `/menu`
+  - Provides a comprehensive menu with categorized items (e.g., Pizzas, Salads, Drinks), including details like description, price, and whether the item is vegetarian.
+
+- **Place an Order**
+  - Endpoint: `/order`
+  - Accepts order details in JSON format and stores it for retrieval. The server logs received orders for confirmation.
+
+- **View the Last Order**
+  - Endpoint: `/orders`
+  - Displays the last placed order in an HTML table format. Includes a breakdown of items and a calculated total price.
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Dor2495/SwiftServer_Pizzeria.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd SwiftServer_Pizzeria/swift-server/SwiftServer
+   ```
+3. Install dependencies:
+   - Ensure you have Swift and the [Swifter](https://github.com/httpswift/swifter) library installed.
+
+4. Run the server:
+   ```bash
+   swift run
+   ```
+
+## Usage
+
+After starting the server, it listens on port `8080` by default. You can interact with the following endpoints:
+
+1. **Pizzeria Information**:  
+   `GET /pizza`  
+   Example Response:
+   ```json
+   {
+     "name": "Bella Napoli",
+     "address": "123 Main Street, Springfield",
+     "phone": "+1-555-123-4567",
+     "email": "contact@bellanapoli.com",
+     "website": "https://www.bellanapoli.com",
+     "opening_hours": {
+       "monday": "11:00 - 22:00",
+       "tuesday": "11:00 - 22:00",
+       "wednesday": "11:00 - 22:00",
+       "thursday": "11:00 - 22:00",
+       "friday": "11:00 - 23:00",
+       "saturday": "12:00 - 23:00",
+       "sunday": "12:00 - 21:00"
+     }
+   }
+   ```
+
+2. **Menu Details**:  
+   `GET /menu`  
+   Example Response:
+   ```json
+   {
+     "categories": [
+       {
+         "name": "Pizzas",
+         "items": [
+           {
+             "id": 1,
+             "name": "Margherita",
+             "description": "Classic pizza with tomato sauce, mozzarella, and basil",
+             "price": 9.99,
+             "vegetarian": true
+           },
+           ...
+         ]
+       },
+       ...
+     ]
+   }
+   ```
+
+3. **Place an Order**:  
+   `POST /order`  
+   Send order details in JSON format. Example:
+   ```json
+   [
+     {
+       "id": 1,
+       "name": "Margherita",
+       "quantity": 2,
+       "price": 9.99
+     },
+     {
+       "id": 6,
+       "name": "Coca-Cola",
+       "quantity": 1,
+       "price": 1.99
+     }
+   ]
+   ```
+
+4. **Retrieve the Last Order**:  
+   `GET /orders`  
+   Displays details of the last order in a user-friendly HTML table format.
+
+## Technologies Used
+
+- **Programming Language**: Swift
+- **Framework**: [Swifter](https://github.com/httpswift/swifter)
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests to enhance the functionality of the server.
+
+## License
+
+This project is licensed under the MIT License.
