@@ -1,126 +1,70 @@
-# SwiftServer_Pizzeria
+# Pizzeria Server
 
-SwiftServer_Pizzeria is a lightweight Swift-based server application designed for a fictional pizzeria. The server provides several endpoints to simulate real-world functionalities such as viewing menu details, placing orders, and retrieving order history. It is built using the [Swifter](https://github.com/httpswift/swifter) library for handling HTTP requests and responses.
+A lightweight HTTP server that provides backend services for the Pizzeria iOS app.
+
+## Overview
+
+This server implements a simple REST API to support a pizza ordering mobile application. It provides endpoints for retrieving restaurant information, menu items, and processing orders.
 
 ## Features
 
-- **View Pizzeria Information**
-  - Endpoint: `/pizza`
-  - Returns information about the pizzeria such as name, address, contact details, and opening hours in JSON format.
+- **Restaurant Information API**: Provides basic details about the pizzeria
+- **Menu API**: Serves the complete menu with categories and items
+- **Order Processing**: Accepts and processes customer orders
+- **Order Viewing**: Simple web interface to view the last submitted order
 
-- **Browse the Menu**
-  - Endpoint: `/menu`
-  - Provides a comprehensive menu with categorized items (e.g., Pizzas, Salads, Drinks), including details like description, price, and whether the item is vegetarian.
+## Endpoints
 
-- **Place an Order**
-  - Endpoint: `/order`
-  - Accepts order details in JSON format and stores it for retrieval. The server logs received orders for confirmation.
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/pizza` | GET    | Returns pizzeria information (name, address, contact details, hours) |
+| `/menu`  | GET    | Returns the complete menu with categories and items |
+| `/order` | POST   | Accepts order submissions (as JSON array of menu items) |
+| `/orders`| GET    | Displays the most recent order in HTML format |
 
-- **View the Last Order**
-  - Endpoint: `/orders`
-  - Displays the last placed order in an HTML table format. Includes a breakdown of items and a calculated total price.
+## Technical Details
 
-## Installation
+- Built with the Swifter HTTP server framework
+- Runs on port 8080
+- Stores the most recent order in memory (not persistent)
+- Returns JSON data compatible with the iOS client app's data models
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Dor2495/SwiftServer_Pizzeria.git
+## Getting Started
+
+### Prerequisites
+
+- Swift 5.0 or later
+- Swifter library
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
    ```
-2. Navigate to the project directory:
-   ```bash
-   cd SwiftServer_Pizzeria/swift-server/SwiftServer
+   swift package resolve
    ```
-3. Install dependencies:
-   - Ensure you have Swift and the [Swifter](https://github.com/httpswift/swifter) library installed.
-
+3. Build the project:
+   ```
+   swift build
+   ```
 4. Run the server:
-   ```bash
+   ```
    swift run
    ```
 
-## Usage
+## Integration with iOS App
 
-After starting the server, it listens on port `8080` by default. You can interact with the following endpoints:
+This server is designed to work with the Pizzeria iOS app. The app connects to this server to:
 
-1. **Pizzeria Information**:  
-   `GET /pizza`  
-   Example Response:
-   ```json
-   {
-     "name": "Bella Napoli",
-     "address": "123 Main Street, Springfield",
-     "phone": "+1-555-123-4567",
-     "email": "contact@bellanapoli.com",
-     "website": "https://www.bellanapoli.com",
-     "opening_hours": {
-       "monday": "11:00 - 22:00",
-       "tuesday": "11:00 - 22:00",
-       "wednesday": "11:00 - 22:00",
-       "thursday": "11:00 - 22:00",
-       "friday": "11:00 - 23:00",
-       "saturday": "12:00 - 23:00",
-       "sunday": "12:00 - 21:00"
-     }
-   }
-   ```
+1. Fetch restaurant information
+2. Load the menu
+3. Submit customer orders
 
-2. **Menu Details**:  
-   `GET /menu`  
-   Example Response:
-   ```json
-   {
-     "categories": [
-       {
-         "name": "Pizzas",
-         "items": [
-           {
-             "id": 1,
-             "name": "Margherita",
-             "description": "Classic pizza with tomato sauce, mozzarella, and basil",
-             "price": 9.99,
-             "vegetarian": true
-           },
-           ...
-         ]
-       },
-       ...
-     ]
-   }
-   ```
+The server expects and returns JSON that matches the data models in the iOS app.
 
-3. **Place an Order**:  
-   `POST /order`  
-   Send order details in JSON format. Example:
-   ```json
-   [
-     {
-       "id": 1,
-       "name": "Margherita",
-       "quantity": 2,
-       "price": 9.99
-     },
-     {
-       "id": 6,
-       "name": "Coca-Cola",
-       "quantity": 1,
-       "price": 1.99
-     }
-   ]
-   ```
+## Limitations
 
-4. **Retrieve the Last Order**:  
-   `GET /orders`  
-   Displays details of the last order in a user-friendly HTML table format.
-
-## Technologies Used
-
-- **Programming Language**: Swift
-- **Framework**: [Swifter](https://github.com/httpswift/swifter)
-
-## Contributing
-
-Contributions are welcome! Feel free to open issues or submit pull requests to enhance the functionality of the server.
-
-## License
-
-This project is licensed under the MIT License.
+- Data is not persisted between server restarts
+- Only stores the most recent order
+- No authentication or security features
+- Designed for local development and testing
